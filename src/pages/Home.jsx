@@ -5,8 +5,20 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Game } from "../components/Game";
 import { GameDetail } from "../components/GameDetail";
+import { useParams } from "react-router-dom";
 
 export const Home = () => {
+  let { id } = useParams();
+
+  useEffect(() => {
+    if (id) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "auto";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [id]);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadAllGames());
@@ -16,7 +28,7 @@ export const Home = () => {
 
   return (
     <StyledGameList>
-      <GameDetail />
+      {id && <GameDetail />}
       <h2>Upcoming Games</h2>
       <StyledGames>
         {games.upcoming.map((game) => {

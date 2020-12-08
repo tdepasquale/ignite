@@ -2,15 +2,21 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 export const GameDetail = () => {
-  const { screenshots, game } = useSelector((state) => state.detail);
+  const history = useHistory();
+  const { screenshots, game, isLoading } = useSelector((state) => state.detail);
 
-  if (Object.keys(game).length === 0 || Object.keys(screenshots).length === 0)
-    return <div></div>;
+  const exitDetailHandler = (e) => {
+    const element = e.target;
+    if (element.classList.contains("shadow")) history.push("/");
+  };
+
+  if (isLoading) return null;
 
   return (
-    <StyledCardShadow>
+    <StyledCardShadow className="shadow" onClick={exitDetailHandler}>
       <StyledDetail>
         <StyledStats>
           <div className="rating">
@@ -70,7 +76,9 @@ const StyledDetail = styled(motion.div)`
   left: 10%;
   color: black;
   img {
-    max-width: 100%;
+    &:not(:last-of-type) {
+      margin-bottom: 1rem;
+    }
   }
 `;
 
@@ -94,9 +102,6 @@ const StyledPlatforms = styled(motion.div)`
 
 const StyledMedia = styled(motion.div)`
   margin-top: 5rem;
-  img {
-    max-width: 100%;
-  }
 `;
 
 const StyledDescription = styled(motion.div)`

@@ -1,8 +1,9 @@
-import { FETCH_GAME_DETAILS } from "../actions/detailAction";
+import { FETCH_GAME_DETAILS, LOADING_DETAILS } from "../actions/detailAction";
 
 const initialState = {
   game: {},
   screenshots: {},
+  isLoading: true,
 };
 
 export const detailReducer = (state = initialState, action) => {
@@ -12,6 +13,12 @@ export const detailReducer = (state = initialState, action) => {
         ...state,
         game: action.payload.game,
         screenshots: action.payload.screenshots,
+        isLoading: false,
+      };
+    case LOADING_DETAILS:
+      return {
+        ...state,
+        isLoading: true,
       };
     default:
       return { ...state };
