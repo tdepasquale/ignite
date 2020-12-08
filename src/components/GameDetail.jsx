@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { getResizedImage } from "../imageUtil";
 
 export const GameDetail = () => {
   const history = useHistory();
@@ -33,14 +34,21 @@ export const GameDetail = () => {
           </StyledInfo>
         </StyledStats>
         <StyledMedia>
-          <img src={game.background_image} alt={game.name} />
+          <img
+            src={getResizedImage(game.background_image, 1280)}
+            alt={game.name}
+          />
         </StyledMedia>
         <StyledDescription>
           <p>{game.description_raw}</p>
         </StyledDescription>
         <div className="gallery">
           {screenshots.results.map((screen) => (
-            <img key={screen.id} src={screen.image} alt={screen.id} />
+            <img
+              key={screen.id}
+              src={getResizedImage(screen.image, 1280)}
+              alt={screen.id}
+            />
           ))}
         </div>
       </StyledDetail>

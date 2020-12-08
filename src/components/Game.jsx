@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { loadGameDetails } from "../actions/detailAction";
 import { Link } from "react-router-dom";
+import { getResizedImage } from "../imageUtil";
 
 export const Game = ({ name, released, image, id }) => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export const Game = ({ name, released, image, id }) => {
       <Link to={`/game/${id}`}>
         <h3>{name}</h3>
         <p>{released}</p>
-        <img src={image} alt={name} loading="lazy" />
+        <img src={getResizedImage(image, 640)} alt={name} loading="lazy" />
       </Link>
     </StyledGame>
   );
