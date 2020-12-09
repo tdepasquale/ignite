@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getResizedImage } from "../imageUtil";
 
-export const GameDetail = () => {
+export const GameDetail = ({ id }) => {
   const history = useHistory();
   const { screenshots, game, isLoading } = useSelector((state) => state.detail);
 
@@ -16,12 +16,13 @@ export const GameDetail = () => {
 
   if (isLoading) return null;
 
+  //layoutId is required for AnimatePresence with Framer Motion. it must match on both components.
   return (
     <StyledCardShadow className="shadow" onClick={exitDetailHandler}>
-      <StyledDetail>
+      <StyledDetail layoutId={id}>
         <StyledStats>
           <div className="rating">
-            <h3>{game.name}</h3>
+            <motion.h3 layoutId={`title ${id}`}>{game.name}</motion.h3>
             <p>Rating: {game.rating}</p>
           </div>
           <StyledInfo>
@@ -34,7 +35,8 @@ export const GameDetail = () => {
           </StyledInfo>
         </StyledStats>
         <StyledMedia>
-          <img
+          <motion.img
+            layoutId={`image ${id}`}
             src={getResizedImage(game.background_image, 1280)}
             alt={game.name}
           />
@@ -48,6 +50,7 @@ export const GameDetail = () => {
               key={screen.id}
               src={getResizedImage(screen.image, 1280)}
               alt={screen.id}
+              loading="lazy"
             />
           ))}
         </div>

@@ -3,7 +3,7 @@ import { FETCH_GAME_DETAILS, LOADING_DETAILS } from "../actions/detailAction";
 const initialState = {
   game: {},
   screenshots: {},
-  isLoading: true,
+  isLoading: false,
 };
 
 export const detailReducer = (state = initialState, action) => {
