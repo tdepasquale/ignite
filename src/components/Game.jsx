@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadGameDetails } from "../actions/detailAction";
 import { Link, useParams } from "react-router-dom";
 import { getResizedImage } from "../imageUtil";
@@ -8,6 +8,7 @@ import { getResizedImage } from "../imageUtil";
 export const Game = ({ name, released, image, id }) => {
   const dispatch = useDispatch();
   const { id: openGameId } = useParams();
+  const { isLoading } = useSelector((state) => state.detail);
 
   const loadDetailHandler = () => {
     dispatch(loadGameDetails(id));
@@ -15,9 +16,11 @@ export const Game = ({ name, released, image, id }) => {
 
   return (
     //layoutId is required for using AnimatePresence with Framer Motion. it must match on both components.
+    //isOpen fixes a bug where the card sits on top of the detail page after the transition and prevents scrolling, highlighting, etc
     <StyledGame
       layoutId={id.toString()}
-      isLoading={openGameId && openGameId !== id?.toString()}>
+      isLoading={openGameId && openGameId !== id?.toString()}
+      isOpen={openGameId === id?.toString() && !isLoading}>
       <div className="loader"></div>
       <motion.h3 layoutId={`title ${id}`}>{name}</motion.h3>
       <Link className="expand" to={`/game/${id}`} onClick={loadDetailHandler}>
@@ -50,6 +53,7 @@ const StyledGame = styled(motion.div)`
     padding: 0.5em 1em;
     display: inline-block;
     border-radius: 1rem;
+    margin-bottom: 1rem;
   }
   ${(props) =>
     props.isLoading &&
@@ -60,5 +64,10 @@ const StyledGame = styled(motion.div)`
         height: 100%;
         width: 100%;
       }
+    `}
+  ${(props) =>
+    props.isOpen &&
+    css`
+      z-index: -10;
     `}
 `;

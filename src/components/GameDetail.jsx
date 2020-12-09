@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import { getResizedImage } from "../imageUtil";
+import { loadGameDetails } from "../actions/detailAction";
 
 export const GameDetail = ({ id }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const { screenshots, game, isLoading } = useSelector((state) => state.detail);
+  const { id: currentGameId } = useParams();
+
+  useEffect(() => {
+    if (Object.keys(game).length === 0)
+      dispatch(loadGameDetails(currentGameId));
+  }, [dispatch, game, currentGameId]);
 
   const exitDetailHandler = (e) => {
     const element = e.target;
     if (element.classList.contains("shadow")) history.push("/");
   };
 
-  if (isLoading) return null;
+  // return null;
+  if (isLoading || Object.keys(game).length === 0) return null;
 
   //layoutId is required for AnimatePresence with Framer Motion. it must match on both components.
   return (
