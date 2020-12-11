@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getResizedImage } from "../imageUtil";
@@ -11,6 +11,7 @@ export const GameDetail = ({ id }) => {
   const dispatch = useDispatch();
   const { screenshots, game, isLoading } = useSelector((state) => state.detail);
   const { id: currentGameId } = useParams();
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   useEffect(() => {
     if (Object.keys(game).length === 0)
@@ -20,6 +21,10 @@ export const GameDetail = ({ id }) => {
   const exitDetailHandler = (e) => {
     const element = e.target;
     if (element.classList.contains("shadow")) history.push("/");
+  };
+
+  const galleryLoadHandler = () => {
+    setIsGalleryOpen(true);
   };
 
   // return null;
@@ -53,16 +58,28 @@ export const GameDetail = ({ id }) => {
         <StyledDescription>
           <p>{game.description_raw}</p>
         </StyledDescription>
-        <div className="gallery">
-          {screenshots.results.map((screen) => (
-            <img
-              key={screen.id}
-              src={getResizedImage(screen.image, 1280)}
-              alt={screen.id}
-              loading="lazy"
-            />
-          ))}
-        </div>
+        <StyledButtonContainer>
+          <StyledButton onClick={galleryLoadHandler}>Load Gallery</StyledButton>
+        </StyledButtonContainer>
+        <AnimatePresence>
+          {isGalleryOpen && (
+            <motion.div
+              className="gallery"
+              key="gallery"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}>
+              {screenshots.results.map((screen) => (
+                <img
+                  key={screen.id}
+                  src={getResizedImage(screen.image, 1280)}
+                  alt={screen.id}
+                  loading="lazy"
+                />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </StyledDetail>
     </StyledCardShadow>
   );
@@ -96,8 +113,9 @@ const StyledDetail = styled(motion.div)`
   left: 10%;
   color: black;
   img {
-    &:not(:last-of-type) {
-      margin-bottom: 1rem;
+    margin: 0 auto 1rem;
+    &:last-of-type {
+      margin-bottom: 0;
     }
   }
 `;
@@ -122,8 +140,24 @@ const StyledPlatforms = styled(motion.div)`
 
 const StyledMedia = styled(motion.div)`
   margin-top: 5rem;
+  img {
+    margin: 0 auto;
+  }
 `;
 
 const StyledDescription = styled(motion.div)`
   margin: 5rem 0;
+`;
+
+const StyledButtonContainer = styled.div`
+  text-align: center;
+`;
+
+const StyledButton = styled(motion.button)`
+  cursor: pointer;
+  background-color: lightgray;
+  padding: 0.5em 1em;
+  display: inline-block;
+  border-radius: 1rem;
+  margin-bottom: 5rem;
 `;

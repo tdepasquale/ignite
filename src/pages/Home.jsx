@@ -81,9 +81,12 @@ export const Home = () => {
 };
 
 const StyledGameList = styled(motion.div)`
-  padding: 0 5rem;
+  padding: 0 5rem 5rem;
   h2 {
     padding: 5rem 0;
+  }
+  @media only screen and (max-width: 800px) {
+    padding: 0 0 5rem;
   }
 `;
 

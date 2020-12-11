@@ -46,6 +46,7 @@ const StyledGame = styled(motion.div)`
   img {
     height: 40vh;
     object-fit: cover;
+    min-width: 100%;
   }
   .expand {
     cursor: pointer;
@@ -70,4 +71,8 @@ const StyledGame = styled(motion.div)`
     css`
       z-index: -10;
     `}
+
+  @media only screen and (max-width: 800px) {
+    max-width: 100vw;
+  }
 `;
