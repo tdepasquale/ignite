@@ -5,6 +5,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getResizedImage } from "../imageUtil";
 import { loadGameDetails } from "../actions/detailAction";
+import playstation from "../img/playstation.svg";
+import steam from "../img/steam.svg";
+import xbox from "../img/xbox.svg";
+import nintendo from "../img/nintendo.svg";
+import apple from "../img/apple.svg";
+import gamepad from "../img/gamepad.svg";
+import starEmpty from "../img/star-empty.png";
+import starFull from "../img/star-full.png";
 
 export const GameDetail = ({ id }) => {
   const history = useHistory();
@@ -27,7 +35,56 @@ export const GameDetail = ({ id }) => {
     setIsGalleryOpen(true);
   };
 
-  // return null;
+  const getPlatformImage = (platform) => {
+    switch (platform) {
+      case "PlayStation 4":
+        return playstation;
+      case "PlayStation 5":
+        return playstation;
+      case "Xbox Series S/X":
+        return xbox;
+      case "Xbox S":
+        return xbox;
+      case "Xbox One":
+        return xbox;
+      case "PC":
+        return steam;
+      case "Nintendo Switch":
+        return nintendo;
+      case "iOS":
+        return apple;
+
+      default:
+        return gamepad;
+    }
+  };
+
+  const getStars = () => {
+    const stars = [];
+    const rating = Math.floor(game.rating);
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating)
+        stars.push(
+          <img
+            src={starFull}
+            className="star"
+            alt="Star"
+            key={i}
+            title="Star"></img>
+        );
+      else
+        stars.push(
+          <img
+            src={starEmpty}
+            className="star"
+            alt="Empty Star"
+            key={i}
+            title="Empty Star"></img>
+        );
+    }
+    return stars;
+  };
+
   if (isLoading || Object.keys(game).length === 0) return null;
 
   //layoutId is required for AnimatePresence with Framer Motion. it must match on both components.
@@ -37,13 +94,21 @@ export const GameDetail = ({ id }) => {
         <StyledStats>
           <div className="rating">
             <motion.h3 layoutId={`title ${id}`}>{game.name}</motion.h3>
-            <p>Rating: {game.rating}</p>
+            <StyledStarContainer>{getStars()}</StyledStarContainer>
           </div>
           <StyledInfo>
             <h3>Platforms</h3>
             <StyledPlatforms>
               {game.platforms.map((data) => {
-                return <h3 key={data.platform.id}>{data.platform.name}</h3>;
+                return (
+                  <img
+                    className="platform"
+                    key={data.platform.id}
+                    src={getPlatformImage(data.platform.name)}
+                    alt={data.platform.name}
+                    title={data.platform.name}
+                  />
+                );
               })}
             </StyledPlatforms>
           </StyledInfo>
@@ -93,6 +158,7 @@ const StyledCardShadow = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 5;
   &::-webkit-scrollbar {
     width: 0.5rem;
   }
@@ -112,10 +178,24 @@ const StyledDetail = styled(motion.div)`
   position: absolute;
   left: 10%;
   color: black;
+  z-index: 10;
+  .platform {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .star {
+    height: 1rem;
+    width: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+  }
   img {
     margin: 0 auto 1rem;
-    &:last-of-type {
-      margin-bottom: 0;
+    width: 100%;
+    .gallery {
+      &:last-of-type {
+        margin-bottom: 0;
+      }
     }
   }
 `;
@@ -160,4 +240,8 @@ const StyledButton = styled(motion.button)`
   display: inline-block;
   border-radius: 1rem;
   margin-bottom: 5rem;
+`;
+
+const StyledStarContainer = styled.div`
+  display: flex;
 `;
