@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadAllGames } from "../actions/gamesActions";
+import { loadAllGames, clearSearched } from "../actions/gamesActions";
 import styled from "styled-components";
 import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { Game } from "../components/Game";
@@ -26,10 +26,38 @@ export const Home = () => {
 
   const games = useSelector((state) => state.games);
 
+  const clearSearchedHandler = () => {
+    dispatch(clearSearched());
+  };
+
   return (
     <StyledGameList>
       <AnimateSharedLayout type="crossfade">
         <AnimatePresence>{id && <GameDetail id={id} />}</AnimatePresence>
+
+        {games.searched.length > 0 && (
+          <div>
+            <StyledTitleContainer>
+              <h2>Searched Games</h2>
+              <StyledButton onClick={clearSearchedHandler}>
+                Clear Search
+              </StyledButton>
+            </StyledTitleContainer>
+            <StyledGames>
+              {games.searched.map((game) => {
+                return (
+                  <Game
+                    key={game.id}
+                    name={game.name}
+                    released={game.released}
+                    id={game.id}
+                    image={game.background_image}
+                  />
+                );
+              })}
+            </StyledGames>
+          </div>
+        )}
 
         <h2>Upcoming Games</h2>
         <StyledGames>
@@ -96,4 +124,19 @@ const StyledGames = styled(motion.div)`
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   grid-column-gap: 3rem;
   grid-row-gap: 5rem;
+`;
+
+const StyledButton = styled(motion.button)`
+  cursor: pointer;
+  background-color: lightgray;
+  padding: 0.5em 1em;
+  display: inline-block;
+  border-radius: 1rem;
+  margin-left: 1rem;
+`;
+
+const StyledTitleContainer = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  align-content: center;
 `;

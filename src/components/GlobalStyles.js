@@ -44,4 +44,8 @@ export const GlobalStyles = createGlobalStyle`
     display: block;
     max-width: 100%;
   }
+  input{
+    font-weight: bold;
+    font-family: "Montserrat", sans-serif;
+  }
 `;

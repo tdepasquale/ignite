@@ -22,9 +22,11 @@ export const GameDetail = ({ id }) => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   useEffect(() => {
-    if (Object.keys(game).length === 0)
+    if (Object.keys(game).length === 0) {
+      history.push("/");
       dispatch(loadGameDetails(currentGameId));
-  }, [dispatch, game, currentGameId]);
+    }
+  }, [dispatch, game, currentGameId, history, isLoading]);
 
   const exitDetailHandler = (e) => {
     const element = e.target;
