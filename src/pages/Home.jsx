@@ -7,6 +7,7 @@ import { Game } from "../components/Game";
 import { GameDetail } from "../components/GameDetail";
 import { useParams } from "react-router-dom";
 import { fadeIn } from "../animations";
+import { Loader } from "../components/Loader";
 
 export const Home = () => {
   let { id } = useParams();
@@ -60,50 +61,58 @@ export const Home = () => {
           </div>
         )}
 
-        <h2>Popular Games</h2>
-        <StyledGames>
-          {games.popular.map((game) => {
-            return (
-              <Game
-                key={game.id}
-                name={game.name}
-                released={game.released}
-                id={game.id}
-                image={game.background_image}
-              />
-            );
-          })}
-        </StyledGames>
+        {games.popular.length > 0 ? (
+          <>
+            <h2>Popular Games</h2>
+            <StyledGames>
+              {games.popular.map((game) => {
+                return (
+                  <Game
+                    key={game.id}
+                    name={game.name}
+                    released={game.released}
+                    id={game.id}
+                    image={game.background_image}
+                  />
+                );
+              })}
+            </StyledGames>
 
-        <h2>Upcoming Games</h2>
-        <StyledGames>
-          {games.upcoming.map((game) => {
-            return (
-              <Game
-                key={game.id}
-                name={game.name}
-                released={game.released}
-                id={game.id}
-                image={game.background_image}
-              />
-            );
-          })}
-        </StyledGames>
+            <h2>Upcoming Games</h2>
+            <StyledGames>
+              {games.upcoming.map((game) => {
+                return (
+                  <Game
+                    key={game.id}
+                    name={game.name}
+                    released={game.released}
+                    id={game.id}
+                    image={game.background_image}
+                  />
+                );
+              })}
+            </StyledGames>
 
-        <h2>New Games</h2>
-        <StyledGames>
-          {games.new.map((game) => {
-            return (
-              <Game
-                key={game.id}
-                name={game.name}
-                released={game.released}
-                id={game.id}
-                image={game.background_image}
-              />
-            );
-          })}
-        </StyledGames>
+            <h2>New Games</h2>
+            <StyledGames>
+              {games.new.map((game) => {
+                return (
+                  <Game
+                    key={game.id}
+                    name={game.name}
+                    released={game.released}
+                    id={game.id}
+                    image={game.background_image}
+                  />
+                );
+              })}
+            </StyledGames>
+          </>
+        ) : (
+          <StyledLoaderContainer>
+            <Loader />
+          </StyledLoaderContainer>
+        )}
       </AnimateSharedLayout>
     </StyledGameList>
   );
@@ -140,4 +149,11 @@ const StyledTitleContainer = styled(motion.div)`
   display: flex;
   align-items: center;
   align-content: center;
+`;
+
+const StyledLoaderContainer = styled(motion.div)`
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
