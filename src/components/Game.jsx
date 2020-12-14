@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadGameDetails } from "../actions/detailAction";
 import { Link, useParams } from "react-router-dom";
 import { getResizedImage } from "../imageUtil";
+import { popup } from "../animations";
 
 export const Game = ({ name, released, image, id }) => {
   const dispatch = useDispatch();
@@ -18,6 +19,9 @@ export const Game = ({ name, released, image, id }) => {
     //layoutId is required for using AnimatePresence with Framer Motion. it must match on both components.
     //isOpen fixes a bug where the card sits on top of the detail page after the transition and prevents scrolling, highlighting, etc
     <StyledGame
+      variants={popup}
+      initial="hidden"
+      animate="show"
       layoutId={id.toString()}
       isLoading={openGameId && openGameId !== id?.toString()}
       isOpen={openGameId === id?.toString() && !isLoading}>

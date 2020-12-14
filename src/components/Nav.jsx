@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import logo from "../img/logo.svg";
 import { fetchSearched } from "../actions/gamesActions";
 import { useDispatch } from "react-redux";
+import { fadeIn } from "../animations";
 
 export const Nav = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ export const Nav = () => {
   };
 
   return (
-    <StyledNav>
+    <StyledNav variants={fadeIn} initial="hidden" animate="show">
       <StyledLogo>
         <img src={logo} alt="Logo" />
         <h1>Ignite</h1>

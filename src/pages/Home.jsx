@@ -6,6 +6,7 @@ import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { Game } from "../components/Game";
 import { GameDetail } from "../components/GameDetail";
 import { useParams } from "react-router-dom";
+import { fadeIn } from "../animations";
 
 export const Home = () => {
   let { id } = useParams();
@@ -31,7 +32,7 @@ export const Home = () => {
   };
 
   return (
-    <StyledGameList>
+    <StyledGameList variants={fadeIn} initial="hidden" animate="show">
       <AnimateSharedLayout type="crossfade">
         <AnimatePresence>{id && <GameDetail id={id} />}</AnimatePresence>
 
@@ -59,9 +60,9 @@ export const Home = () => {
           </div>
         )}
 
-        <h2>Upcoming Games</h2>
+        <h2>Popular Games</h2>
         <StyledGames>
-          {games.upcoming.map((game) => {
+          {games.popular.map((game) => {
             return (
               <Game
                 key={game.id}
@@ -74,9 +75,9 @@ export const Home = () => {
           })}
         </StyledGames>
 
-        <h2>Popular Games</h2>
+        <h2>Upcoming Games</h2>
         <StyledGames>
-          {games.popular.map((game) => {
+          {games.upcoming.map((game) => {
             return (
               <Game
                 key={game.id}
