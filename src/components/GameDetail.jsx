@@ -18,13 +18,15 @@ export const GameDetail = ({ id }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { screenshots, game, isLoading } = useSelector((state) => state.detail);
+  const { popular } = useSelector((state) => state.games);
   const { id: currentGameId } = useParams();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   useEffect(() => {
-    if (Object.keys(game).length === 0)
-      dispatch(loadGameDetails(currentGameId));
-  }, [dispatch, game, currentGameId, history, isLoading]);
+    //if you navigate straight to the details page, wait 750ms for the game popup animation to finish and then dispatch the call to load game details.
+    if (Object.keys(game).length === 0 && popular.length)
+      setTimeout(() => dispatch(loadGameDetails(currentGameId)), 750);
+  }, [dispatch, game, currentGameId, popular]);
 
   const exitDetailHandler = (e) => {
     const element = e.target;
